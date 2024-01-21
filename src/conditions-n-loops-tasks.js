@@ -155,7 +155,7 @@ function convertNumberToString(numberStr) {
   let result = '';
 
   for (let i = 0; i < numberStr.length; i += 1) {
-    const currentChar = numberStr.charAt(i);
+    const currentChar = numberStr[i];
     let word = currentChar;
 
     switch (currentChar) {
@@ -336,8 +336,49 @@ function getBalanceIndex(arr) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const spiral = [];
+  for (let row = 0; row < size; row += 1) {
+    spiral[row] = [];
+    for (let col = 0; col < size; col += 1) {
+      spiral[row][col] = 0;
+    }
+  }
+
+  let currentValue = 1;
+  let depth = 0;
+
+  while (currentValue <= size * size) {
+    let rowIndex = depth;
+    let colIndex = depth;
+
+    for (; colIndex < size - depth; colIndex += 1) {
+      spiral[rowIndex][colIndex] = currentValue;
+      currentValue += 1;
+    }
+    colIndex -= 1;
+
+    for (rowIndex += 1; rowIndex < size - depth; rowIndex += 1) {
+      spiral[rowIndex][colIndex] = currentValue;
+      currentValue += 1;
+    }
+    rowIndex -= 1;
+
+    for (colIndex -= 1; colIndex >= depth; colIndex -= 1) {
+      spiral[rowIndex][colIndex] = currentValue;
+      currentValue += 1;
+    }
+    colIndex += 1;
+
+    for (rowIndex -= 1; rowIndex > depth; rowIndex -= 1) {
+      spiral[rowIndex][colIndex] = currentValue;
+      currentValue += 1;
+    }
+
+    depth += 1;
+  }
+
+  return spiral;
 }
 
 /**
@@ -355,8 +396,27 @@ function getSpiralMatrix(/* size */) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const sourceMatrix = matrix;
+  const matrixLength = matrix.length;
+
+  for (let i = 0; i < matrixLength; i += 1) {
+    for (let j = i; j < matrixLength; j += 1) {
+      const currentElement = sourceMatrix[i][j];
+      sourceMatrix[i][j] = sourceMatrix[j][i];
+      sourceMatrix[j][i] = currentElement;
+    }
+  }
+
+  for (let i = 0; i < matrixLength; i += 1) {
+    for (let j = 0; j < Math.floor(matrixLength / 2); j += 1) {
+      const currentElement = sourceMatrix[i][j];
+      sourceMatrix[i][j] = sourceMatrix[i][matrixLength - j - 1];
+      sourceMatrix[i][matrixLength - j - 1] = currentElement;
+    }
+  }
+
+  return sourceMatrix;
 }
 
 /**
@@ -373,8 +433,22 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const sourceArray = arr;
+
+  for (let i = 1; i < sourceArray.length; i += 1) {
+    const current = sourceArray[i];
+    let j = i - 1;
+
+    while (j >= 0 && sourceArray[j] > current) {
+      sourceArray[j + 1] = sourceArray[j];
+      j -= 1;
+    }
+
+    sourceArray[j + 1] = current;
+  }
+
+  return sourceArray;
 }
 
 /**
