@@ -468,8 +468,34 @@ function sortByAsc(arr) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let result = str;
+  let maxIterations = 0;
+  const hash = {};
+
+  for (let j = 0; j < iterations; j += 1) {
+    let headStr = '';
+    let tailStr = '';
+
+    for (let i = 0; i < result.length; i += 2) {
+      headStr += result.charAt(i);
+      if (i + 1 < result.length) {
+        tailStr += result.charAt(i + 1);
+      }
+    }
+
+    result = headStr + tailStr;
+    maxIterations += 1;
+    hash[maxIterations] = result;
+
+    if (result === str) {
+      const cycleIterations = iterations % maxIterations;
+      result = hash[cycleIterations === 0 ? maxIterations : cycleIterations];
+      break;
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -489,8 +515,47 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  let num = number;
+  const digits = [];
+
+  while (num > 0) {
+    digits.unshift(num % 10);
+    num = Math.floor(num / 10);
+  }
+
+  let i = digits.length - 2;
+  while (i >= 0 && digits[i] >= digits[i + 1]) {
+    i -= 1;
+  }
+
+  if (i === -1) return number;
+
+  let j = digits.length - 1;
+  while (digits[j] <= digits[i]) {
+    j -= 1;
+  }
+
+  let temp = digits[i];
+  digits[i] = digits[j];
+  digits[j] = temp;
+
+  let left = i + 1;
+  let right = digits.length - 1;
+  while (left < right) {
+    temp = digits[left];
+    digits[left] = digits[right];
+    digits[right] = temp;
+    left += 1;
+    right -= 1;
+  }
+
+  let result = 0;
+  for (let k = 0; k < digits.length; k += 1) {
+    result = result * 10 + digits[k];
+  }
+
+  return result;
 }
 
 module.exports = {
